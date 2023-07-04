@@ -4,9 +4,6 @@
 date_time_str="$(TZ="UST-8" date +%Y-%m-%d_%H-%M-%S)"
 markdown_log_file="NodeBenchResult_${date_time_str}.md"
 
-# clear log file
-> $markdown_log_file
-
 function green_color(){
     echo -ne "\e[1;32m"
 }
