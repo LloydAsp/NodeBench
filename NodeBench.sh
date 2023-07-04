@@ -96,7 +96,7 @@ function print_markdown_block(){
 }
 
 function yabs(){
-    fetch 'https://yabs.sh' | bash -s -- -9 -6 | print_markdown_block Yabs测试
+    fetch 'https://yabs.sh' | bash -s -- -5 -6 | print_markdown_block Yabs测试
 }
 
 function backtrace(){
