@@ -167,7 +167,8 @@ function create_server(){
         `"content-type: text/plain; charset=utf-8\r\n\r\n";
         cat "$markdown_log_file" | \
             sed -E 's/^.*\x1B(\[0K)|(\[H)//g' | \
-            sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g'
+            sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' | \
+            sed 's/^.*\x1B//g'
     ) | \
     nc -l -p "$ans";
     #done
