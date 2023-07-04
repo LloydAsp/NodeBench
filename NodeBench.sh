@@ -160,15 +160,19 @@ function create_server(){
         echo "请在浏览器中打开http://${ip_addr}:${ans}"
     fi
     echo "复制结束后，ctrl + c 结束"
+    filtered_markdown="$(
+        cat "$markdown_log_file" | \
+        sed -E 's/^.*\x1B(\[0K)|(\[H)//g' | \
+        sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' | \
+        sed 's/\x1B//g'
+    )"
+
     #while true; do
     (
         echo -ne "HTTP/1.1 200 OK\r\n"`
-        `"Content-Length: $(wc -c < $markdown_log_file)\r\n"`
+        `"Content-Length: $(echo "$filtered_markdown" | wc -c)\r\n"`
         `"content-type: text/plain; charset=utf-8\r\n\r\n";
-        cat "$markdown_log_file" | \
-            sed -E 's/^.*\x1B(\[0K)|(\[H)//g' | \
-            sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' | \
-            sed 's/^.*\x1B//g'
+        echo "$filtered_markdown"
     ) | \
     nc -l -p "$ans";
     #done
