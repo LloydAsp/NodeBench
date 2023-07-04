@@ -168,7 +168,7 @@ function create_server(){
         echo -ne "HTTP/1.1 200 OK\r\n"`
         `"Content-Length: $(wc -c < $markdown_log_file)\r\n"`
         `"content-type: text/plain; charset=utf-8\r\n\r\n";
-        cat "$markdown_log_file"
+        cat "$markdown_log_file" | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g'
     ) | \
     nc -l -p "$ans";
     #done

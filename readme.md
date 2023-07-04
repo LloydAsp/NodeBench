@@ -6,6 +6,16 @@
 - 自动输出为markdown文件，方便论坛粘贴
 - 自动建立一个简单的服务器，方便通过浏览器复制数据
 
+## 使用方法
+
+```
+bash <(curl -sL https://raw.githubusercontent.com/LloydAsp/NodeBench/main/NodeBench.sh)
+```
+或者
+```
+bash <(wget -qO- https://raw.githubusercontent.com/LloydAsp/NodeBench/main/NodeBench.sh)
+```
+
 ## 相关脚本
 感谢以下作者，本脚本只是做了一些简单的整合工作
 - [masonr/yet-another-bench-script: YABS - a simple bash script to estimate Linux server performance using fio, iperf3, & Geekbench](https://github.com/masonr/yet-another-bench-script)
