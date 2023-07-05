@@ -184,9 +184,11 @@ function main(){
     yabs
     backtrace
     RegionRestrictionCheck
-    detailInfo
-    echo -ne "\e[1;33m是否进行单线程测速(y/N) default n: \e[m"
+    echo -ne "\e[1;33m是否进行单线程测速(Y/n) default Y: \e[m"
     read ans
+    if [ -z "$ans" ] ; then
+        ans=y
+    fi
     if [ "$ans" == 'y' -o "$ans" == 'Y' ] ; then
         hyperspeed
     fi
