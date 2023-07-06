@@ -50,14 +50,11 @@ function fetch(){
     download_url="$1"
     if [ -n "$(command -v wget)" ] ; then
         wget -qO- $download_url
-        fetch_cmd="wget"
     elif [ -n "$(command -v curl)" ] ; then
         curl -sLo- $download_url
-        fetch_cmd="curl"
     else
         install wget
         wget -qO- $download_url
-        fetch_cmd="wget"
     fi
 }
 
@@ -139,10 +136,10 @@ function main(){
         benchsh
     fi
 
-    if [ $fetch_cmd == 'curl' ] ; then
-        curl -s --data-binary @"$markdown_log_file" "$api_url"
-    else
+    if [ -n "$(command -v wget)" ] ; then
         wget -qO- --post-file "$markdown_log_file" "$api_url" | cat
+    else
+        curl -s --data-binary @"$markdown_log_file" "$api_url"
     fi
 }
 
