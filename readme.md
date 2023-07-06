@@ -4,16 +4,12 @@
 
 - 一键自动测试Yabs，三网线路，区域解锁等功能
 - 自动输出为markdown文件，方便论坛粘贴
-- 自动建立一个简单的服务器，方便通过浏览器复制数据
+- 自动输出便于粘贴的pastbin
 
 ## 使用方法
 
 ```
 bash <(curl -sL https://raw.githubusercontent.com/LloydAsp/NodeBench/main/NodeBench.sh)
-```
-或者
-```
-bash <(wget -qO- https://raw.githubusercontent.com/LloydAsp/NodeBench/main/NodeBench.sh)
 ```
 
 ## 相关脚本
