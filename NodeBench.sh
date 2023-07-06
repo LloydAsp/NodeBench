@@ -3,6 +3,7 @@
 # constant
 date_time_str="$(TZ="UST-8" date +%Y-%m-%d_%H-%M-%S)"
 markdown_log_file="NodeBenchResult_${date_time_str}.md"
+api_url="https://nb.util.eu.org/api/bench/"
 
 function green_color(){
     echo -ne "\e[1;32m"
@@ -49,11 +50,14 @@ function fetch(){
     download_url="$1"
     if [ -n "$(command -v wget)" ] ; then
         wget -qO- $download_url
+        fetch_cmd="wget"
     elif [ -n "$(command -v curl)" ] ; then
         curl -sLo- $download_url
+        fetch_cmd="curl"
     else
         install wget
         wget -qO- $download_url
+        fetch_cmd="wget"
     fi
 }
 
@@ -72,13 +76,11 @@ function print_header(){
     done
 
 
-    echo -n "$title_prefix" >> $markdown_log_file
-    green_color
-    echo -ne '>>>>>>>>   '
+    green_color | tee -a $markdown_log_file
+    echo -ne $title_prefix | tee -a $markdown_log_file
     echo -ne $header | tee -a $markdown_log_file
-    echo -ne '   <<<<<<<<'
-    white_color
-    echo | tee -a $markdown_log_file
+    white_color | tee -a $markdown_log_file
+    echo -e '\n' | tee -a $markdown_log_file
 }
 
 function print_code_block(){
@@ -117,67 +119,6 @@ function benchsh(){
         print_markdown_block bench.sh测试
 }
 
-function detailInfo(){
-    print_header "详细信息"
-    print_header "CPU" 2
-    (
-        if [ -n "$(command -v lscpu)" ] ; then
-            echo 'lscpu';
-            lscpu
-        else
-            echo "cat /proc/cpuinfo | sed -n 1,/^$/p";
-            cat /proc/cpuinfo | sed -n 1,/^$/p
-        fi
-    ) | print_code_block
-    print_header "Merory" 2
-    (
-        echo 'free -h';
-        free -h
-    ) | print_code_block
-    print_header "Disk" 2
-    (
-        echo 'df -hT';
-        df -hT
-    ) | print_code_block
-}
-
-function create_server(){
-    if [ -z "$(command -v nc)" ] ; then
-        install netcat
-    fi
-
-    green_color
-    echo -n "请输入http监听端口号，默认8765:"
-    white_color
-    read ans
-    if [ -z "$ans" ] ; then
-        ans=8765
-    fi
-    ip_addr="$(curl -sL ip.gs)"
-    if echo $ip_addr | grep ':' ;then
-        echo "请在浏览器中打开http://[${ip_addr}]:${ans}"
-    else
-        echo "请在浏览器中打开http://${ip_addr}:${ans}"
-    fi
-    echo "复制结束后，ctrl + c 结束"
-    filtered_markdown="$(
-        cat "$markdown_log_file" | \
-        sed -E 's/^.*\x1B(\[0K)|(\[H)//g' | \
-        sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' | \
-        sed 's/\x1B//g'
-    )"
-
-    #while true; do
-    (
-        echo -ne "HTTP/1.1 200 OK\r\n"`
-        `"Content-Length: $(echo "$filtered_markdown" | wc -c)\r\n"`
-        `"content-type: text/plain; charset=utf-8\r\n\r\n";
-        echo "$filtered_markdown"
-    ) | \
-    nc -l -p "$ans";
-    #done
-}
-
 function main(){
     print_help
 
@@ -197,13 +138,11 @@ function main(){
     if [ "$ans" == 'y' -o "$ans" == 'Y' ] ; then
         benchsh
     fi
-    echo -ne "\e[1;33m是否开启本地服务器方便复制文件(Y/n) default y: \e[m"
-    read ans
-    if [ -z "$ans" ] ; then
-        ans=y
-    fi
-    if [ "$ans" == 'y' -o "$ans" == 'Y' ] ; then
-        create_server
+
+    if [ $fetch_cmd == 'curl' ] ; then
+        curl -s --data-binary=@"$markdown_log_file" "$api_url"
+    else
+        wget -qO- --post-file "$markdown_log_file" "$api_url" | cat
     fi
 }
 
