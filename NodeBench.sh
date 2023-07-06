@@ -77,7 +77,7 @@ function print_header(){
 
 
     green_color | tee -a $markdown_log_file
-    echo -ne $title_prefix | tee -a $markdown_log_file
+    echo -ne "$title_prefix" | tee -a $markdown_log_file
     echo -ne $header | tee -a $markdown_log_file
     white_color | tee -a $markdown_log_file
     echo -e '\n' | tee -a $markdown_log_file
