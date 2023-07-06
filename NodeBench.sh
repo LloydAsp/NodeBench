@@ -140,7 +140,7 @@ function main(){
     fi
 
     if [ $fetch_cmd == 'curl' ] ; then
-        curl -s --data-binary=@"$markdown_log_file" "$api_url"
+        curl -s --data-binary @"$markdown_log_file" "$api_url"
     else
         wget -qO- --post-file "$markdown_log_file" "$api_url" | cat
     fi
