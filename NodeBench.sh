@@ -141,6 +141,7 @@ function main(){
     else
         curl -s --data-binary @"$markdown_log_file" "$api_url"
     fi
+    echo
 }
 
 main
