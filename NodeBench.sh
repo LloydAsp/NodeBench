@@ -46,6 +46,14 @@ function install(){
     $cmd2 "$@"
 }
 
+function pre_install(){
+    if [ -z "$(command -v wget)" ] ; then
+        install wget
+    elif [ -z "$(command -v curl)" ] ; then
+        install curl
+    fi
+}
+
 function fetch(){
     download_url="$1"
     if [ -n "$(command -v wget)" ] ; then
@@ -118,6 +126,7 @@ function benchsh(){
 
 function main(){
     print_help
+    pre_install
 
     yabs
     backtrace
