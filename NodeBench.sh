@@ -42,14 +42,18 @@ function install(){
         echo "Error: Not Supported Os"
         exit 1
     fi
-    $cmd1 update
+    if [ -z "$updated" ] ; then
+        $cmd1 update
+        updated=1
+    fi
     $cmd2 "$@"
 }
 
 function pre_install(){
     if [ -z "$(command -v wget)" ] ; then
         install wget
-    elif [ -z "$(command -v curl)" ] ; then
+    fi
+    if [ -z "$(command -v curl)" ] ; then
         install curl
     fi
 }
