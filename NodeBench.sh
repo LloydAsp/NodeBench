@@ -108,7 +108,7 @@ function yabs(){
 }
 
 function backtrace(){
-    fetch 'https://raw.githubusercontent.com/zhanghanyun/backtrace/main/install.sh' | \
+    fetch 'https://raw.githubusercontent.com/ludashi2020/backtrace/main/install.sh' | \
         bash  2>&1 | print_markdown_block 三网回程路由测试
 }
 
