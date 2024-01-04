@@ -113,7 +113,7 @@ function backtrace(){
 }
 
 function RegionRestrictionCheck(){
-    num=0 bash <(fetch https://raw.githubusercontent.com/lmc999/RegionRestrictionCheck/main/check.sh | \
+    num=0 bash <(fetch https://raw.githubusercontent.com/xykt/RegionRestrictionCheck/main/check.sh | \
         sed -E '/请输入正确数字或直接按回车:/d') | sed -n '/正在测试/,/测试已结束/p' | \
         print_markdown_block 流媒体平台及游戏区域限制测试
 }
@@ -142,11 +142,6 @@ function main(){
     fi
     if [ "$ans" == 'y' -o "$ans" == 'Y' ] ; then
         hyperspeed
-    fi
-    echo -ne "\e[1;33m是否补充测试bench.sh(y/N) default n: \e[m"
-    read ans
-    if [ "$ans" == 'y' -o "$ans" == 'Y' ] ; then
-        benchsh
     fi
 
     if [ -n "$(command -v wget)" ] ; then
